@@ -9,9 +9,10 @@ ds = datastore('/n/home12/sye/ngwe_hbs_lab/Lab/fake_price/data/processed_data/su
 ds.SelectedVariableNames(9) = [];
 ds.SelectedFormats{3} = '%s'; 
 %ds.SelectedFormats{4} = '%s'; 
-%ds.SelectedFormats{5} = '%s'; 
+ds.SelectedFormats{5} = '%s'; 
 data = readall(ds); 
 data = data(data.channel_code == 3 | data.channel_code == 5, :); 
+data.style_item_color = strcat(data.item_color, {','}, data.style);
  
 savePath = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/choiceSets'; 
 
@@ -49,11 +50,12 @@ for i = 1:length(uniqueStore)
  
     % get unique products in that store and calculate min and max
     
-    uStyle = unique(tTransactions.style); 
+    uStyle = unique(tTransactions.style_item_color); 
     minDate = nan(length(uStyle),1); 
     maxDate = nan(length(uStyle),1); 
     for j = length(uStyle):-1:1 
-        tDates = tTransactions.transaction_date(strcmp(tTransactions.style, uStyle{j}));
+        tDates = tTransactions.transaction_date( ...
+            strcmp(tTransactions.style_item_color, uStyle{j}));
         minDate(j) = min(tDates); 
         maxDate(j) = max(tDates); 
     end

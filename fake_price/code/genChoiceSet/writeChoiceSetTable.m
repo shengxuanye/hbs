@@ -2,12 +2,12 @@ function writeChoiceSetTable(minRange, maxRange)
 %WRITECHOICESETTABLE generate full logit table
 % Shengxuan Ye 7/9/2015
 
-%minRange = 1; 
-%maxRange = 100; 
+minRange = 1; 
+maxRange = 20; 
 
-basePath = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/choiceSets/160213'; 
+basePath = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/choiceSets/170618'; 
 %saveFile = '/scratch/choicesets/full_logitTable2_1_1000.csv'; 
-saveFile = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/full_logitTable2_3000_5000_3.csv';  % this saves to memory! 
+saveFile = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/full_logitTable_style2_1_300_3.csv';  % this saves to memory! 
 
 fullTable = {}; 
 gidcount = 1; 
@@ -38,5 +38,5 @@ catTable = vertcat(fullTable{:});
 
 delete(saveFile); 
 
-formatSpec='%d,%d,"%s","%s","%s","%s","%s","%s",%.2f,%d,%.2f,%d,%d,%d,%.2f,%,2f,%.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n'; 
+formatSpec='%d,%d,"%s","%s","%s","%s","%s","%s",%.2f,%d,%.2f,%d,%d,%d,%.2f,%,2f,%.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,"%s",%d,%d\n'; 
 writetable(catTable, saveFile); 
