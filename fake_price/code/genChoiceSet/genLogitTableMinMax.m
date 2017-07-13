@@ -13,6 +13,7 @@ ds.SelectedFormats{5} = '%s';
 data = readall(ds); 
 
 data = data(data.channel_code == 5,:); 
+data.style_item_color = strcat(data.item_color, {','}, data.style);
 
 choiceDataPath = '/net/hbsfs01/srv/export/ngwe_hbs_lab/share_root/Lab/fake_price/data/processed_data/choiceSets'; 
 load([choiceDataPath '/choiceData']); 
@@ -20,17 +21,17 @@ fprintf('.');
 
 %% preprocessing 
 %scratchPath = '/scratch/choicesets/150709'; 
-scratchPath = [choiceDataPath '/160213']; 
+scratchPath = [choiceDataPath '/170618']; 
 
-if ~exist(scratchPath, 'dir');
+if ~exist(scratchPath, 'dir')
     mkdir(scratchPath); 
 end
 
 
 % get all unique styles
-[~, ia] = unique(data.style);
+[~, ia] = unique(data.style_item_color);
 styleData = data(ia, :);   
-styleData.Properties.RowNames = styleData.style;
+styleData.Properties.RowNames = styleData.style_item_color;
 
 % % this calculates mean price info, and is slow.. 
 % fprintf('total styles = %d... \n', height(styleData));  
@@ -76,7 +77,7 @@ for i = startT:endT
     % update price information (using closest transactions) 
     tPrice = data(data.store_code == uStoreDate.store_code(i),:); 
     for j = 1:height(tTable)
-        ttPrice = tPrice(strcmp(tPrice.style, tTable.style(j)),:); 
+        ttPrice = tPrice(strcmp(tPrice.style_item_color, tTable.style_item_color(j)),:); 
         [~, loc] = min(ttPrice.transaction_date - uStoreDate.transaction_date(i)); 
         tTable.price(j) = mean(ttPrice.price(loc));
     end
@@ -88,7 +89,7 @@ for i = startT:endT
     ttTable = cell(1, height(tTransactions)); 
     for j = 1:height(tTransactions)
         ttTable{j} = tTable; 
-        ttTable{j}{tTransactions.style(j), 'choice'} = 1;
+        ttTable{j}{tTransactions.style_item_color(j), 'choice'} = 1;
         ttTable{j}.gid = ones(height(tTable),1)*count; 
         ttTable{j}.Properties.RowNames = {}; 
         
